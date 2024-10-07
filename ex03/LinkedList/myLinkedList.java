@@ -3,6 +3,8 @@ package ex03.LinkedList;
 import java.util.UUID;
 
 import ex03.Transaction;
+import ex03.TransactionNotFoundException;
+import ex03.UserNotFoundException;
 
 public class myLinkedList {
     Node head;
@@ -40,16 +42,34 @@ public class myLinkedList {
         node.next = null;
         node.prev = null;
     }
-    public void removeById(String id) {
+    public void removeById(UUID id) {
         Node tailTemp = tail;
         while(tailTemp != null) {
             Transaction currData = tailTemp.data;
-            UUID uuid = UUID.fromString(id);
-            if(uuid.equals(currData.getId())) {
+            if(id.equals(currData.getId())) {
                 deleteNode(tailTemp);
+                return;
             }
             tailTemp = tailTemp.next;
         }
+        throw new TransactionNotFoundException("Transaction not found");
+    }
+
+    public Transaction[] toArray() {
+        int size = 0;
+        Node tailTemp = tail;   
+        while(tailTemp != null) {
+            size++;
+            tailTemp = tailTemp.next;
+        }
+        Transaction[] arr = new Transaction[size];
+        tailTemp = tail;
+        int i = 0;
+        while(i < size) {
+            arr[i++] = tailTemp.data;
+            tailTemp = tailTemp.next;
+        }
+        return arr;
     }
     
 }

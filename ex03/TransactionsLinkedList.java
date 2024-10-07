@@ -1,5 +1,7 @@
 package ex03;
 
+import java.util.UUID;
+
 import ex03.LinkedList.myLinkedList;
 
 public class TransactionsLinkedList implements TransactionsList {
@@ -9,11 +11,11 @@ public class TransactionsLinkedList implements TransactionsList {
         myLinkedList.addAtHead(transaction);
     }
 
-    public void removeTransactionById(String id) {
+    public void removeTransactionById(UUID id) {
         myLinkedList.removeById(id);
     }
 
     public Transaction[] transformIntoArray() {
-        return new Transaction[0];
+        return myLinkedList.toArray();
     }
 }

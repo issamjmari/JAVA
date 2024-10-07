@@ -2,30 +2,42 @@ package ex03;
 
 class Program {
     public static void main(String[] args) {
-        UsersArrayList usersArrayList = new UsersArrayList();
+        User mark = new User("mark", 500);
+        User john = new User("john", 300);
 
-        System.out.println("*******************************");
-        for(int i = 0; i < 20; i++) {
-            User user = new User("user" + i, i * 20);
-            System.out.println("user " + user.getName());
-            usersArrayList.addUser(user);
+        Transaction income = new Transaction(mark, john, "INCOME", 300);
+        Transaction outcome = new Transaction(john, mark, "OUTCOME", -300);
+    
+        TransactionsList markList = mark.getTransactionsList();
+        markList.addTransaction(income);
+        markList.addTransaction(outcome);
+        TransactionsList johnList = john.getTransactionsList();
+        johnList.addTransaction(income);
+        johnList.addTransaction(outcome);
+
+        Transaction[] markListArray = markList.transformIntoArray();
+
+        System.out.println("-------------MARK---------------");
+        for(Transaction transaction: markListArray) {
+            System.out.println("******* mark transaction " + transaction.getId() + " *******");
+            transaction.toStr();
         }
-        System.out.println("*******************************");
-        System.out.println("Users with id 1 and 2:");
-        User foundUser1 = usersArrayList.getUserById(1);
-        foundUser1.toStr();
-        User foundUser2 = usersArrayList.getUserById(2);
-        foundUser2.toStr();
-        System.out.println("*******************************");
-        System.out.println("Users with index 7 and 15:");
-        User foundUser7 = usersArrayList.getUserById(7);
-        foundUser7.toStr();
-        User foundUser15 = usersArrayList.getUserById(15);
-        foundUser15.toStr();
-        System.out.println("*******************************");
+        System.out.println("//////////////////////////////////");
+        Transaction[] johnListArray = johnList.transformIntoArray();
 
-        System.out.println("Total number of users:");
-        System.out.println(usersArrayList.getUsersNumber());
-
+        System.out.println("--------------JOHN--------------");
+        for(Transaction transaction: johnListArray) {
+            System.out.println("******* john transaction " + transaction.getId() + " *******");
+            transaction.toStr();
+        }
+        System.out.println("//////////////////////////////////");
+        markList.removeTransactionById(markListArray[1].getId());
+        johnList.removeTransactionById(johnListArray[0].getId());
+        johnListArray = johnList.transformIntoArray();
+        System.out.println("--------------JOHN AFTER DELETE--------------");
+        for(Transaction transaction: johnListArray) {
+            System.out.println("******* john transaction " + transaction.getId() + " *******");
+            transaction.toStr();
+        }
     }
 }
