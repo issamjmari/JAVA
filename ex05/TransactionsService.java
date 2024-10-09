@@ -1,12 +1,17 @@
-package ex04;
+package ex05;
 
 import java.util.UUID;
 
 public class TransactionsService {
     private UsersList userList = new UsersArrayList();
 
-    void addUser(User user) {
-        this.userList.addUser(user);
+    int addUser(User user) {
+        return this.userList.addUser(user);
+    }
+
+    User getUserById(int userId) {
+        User user = userList.getUserById(userId);
+        return user;
     }
 
     int getUserBalance(User user) {

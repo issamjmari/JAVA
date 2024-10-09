@@ -1,4 +1,4 @@
-package ex04;
+package ex05;
 
 import java.util.UUID;
 
@@ -41,6 +41,9 @@ public class Transaction {
     }
     public UUID getId() {
         return id;
+    }
+    public int getAmount() {
+        return amount;
     }
     public void toStr() {
         System.out.println((

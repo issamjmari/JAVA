@@ -1,8 +1,8 @@
-package ex04;
+package ex05;
 
 import java.util.UUID;
 
-import ex04.LinkedList.myLinkedList;
+import ex05.LinkedList.myLinkedList;
 
 public class TransactionsLinkedList implements TransactionsList {
     myLinkedList myLinkedList = new myLinkedList();

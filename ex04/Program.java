@@ -2,41 +2,63 @@ package ex04;
 
 class Program {
     public static void main(String[] args) {
-        User mark = new User("mark", 500);
-        User john = new User("john", 300);
+        TransactionsService transactionsService = new TransactionsService();
+        User mark = new User("mark", 1000);
+        User john = new User("john", 800);
 
-        Transaction income = new Transaction(mark, john, "INCOME", 300);
-        Transaction outcome = new Transaction(john, mark, "OUTCOME", -300);
+        transactionsService.addUser(john);
+        transactionsService.addUser(mark);
+
+        System.out.print("john balance: ");
+        int johnBalance = transactionsService.getUserBalance(john);
+        System.out.println(johnBalance);
+
+        System.out.println("performing transaction between john and mark. . .");
+        transactionsService.performTransaction(john.getId(), mark.getId(), 300);
+        System.out.println("Finished.");
+
+        System.out.print("john balance: ");
+        johnBalance = transactionsService.getUserBalance(john);
+        System.out.println(johnBalance);
+
+        System.out.print("mark balance: ");
+        int markBalance = transactionsService.getUserBalance(mark);
+        System.out.println(markBalance + "\n");
+
+        System.out.print("mark transfers: ");
+        Transaction[] markTransactions = transactionsService.getUserTransfers(mark.getId());
+        for(Transaction transaction: markTransactions) {
+            transaction.toStr();
+        }
+
+        System.out.print("john transfers: ");
+        Transaction[] johnTransactions = transactionsService.getUserTransfers(john.getId());
+        Transaction jTransaction = new Transaction();
+        for(Transaction transaction: johnTransactions) {
+            jTransaction = transaction;
+            transaction.toStr();
+        }
+
+        System.out.println("transaction remove: ");
+        transactionsService.removeTransaction(jTransaction.getId(), john.getId());
     
-        TransactionsList markList = mark.getTransactionsList();
-        markList.addTransaction(income);
-        markList.addTransaction(outcome);
-        TransactionsList johnList = john.getTransactionsList();
-        johnList.addTransaction(income);
-        johnList.addTransaction(outcome);
-
-        Transaction[] markListArray = markList.transformIntoArray();
-
-        System.out.println("-------------MARK---------------");
-        for(Transaction transaction: markListArray) {
-            System.out.println("******* mark transaction " + transaction.getId() + " *******");
+        johnTransactions = transactionsService.getUserTransfers(john.getId());
+        System.out.print("john transfers: ");
+        boolean isThereTransac = false;
+        for(Transaction transaction: johnTransactions) {
+            isThereTransac = true;
+            jTransaction = transaction;
             transaction.toStr();
         }
-        System.out.println("//////////////////////////////////");
-        Transaction[] johnListArray = johnList.transformIntoArray();
+        if(isThereTransac == false)
+            System.out.print("EMPTY");
+        System.out.println("\n");
 
-        System.out.println("--------------JOHN--------------");
-        for(Transaction transaction: johnListArray) {
-            System.out.println("******* john transaction " + transaction.getId() + " *******");
-            transaction.toStr();
-        }
-        System.out.println("//////////////////////////////////");
-        markList.removeTransactionById(markListArray[1].getId());
-        johnList.removeTransactionById(johnListArray[0].getId());
-        johnListArray = johnList.transformIntoArray();
-        System.out.println("--------------JOHN AFTER DELETE--------------");
-        for(Transaction transaction: johnListArray) {
-            System.out.println("******* john transaction " + transaction.getId() + " *******");
+        Transaction[] unpaired = transactionsService.getUnpairedTransactions();
+        System.out.println("List of unpaired transactions: ");
+        for(Transaction transaction: unpaired) {
+            isThereTransac = true;
+            jTransaction = transaction;
             transaction.toStr();
         }
     }

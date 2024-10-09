@@ -1,7 +1,7 @@
-package ex04;
+package ex05;
 import java.util.UUID;
 public interface UsersList {
-    void addUser(User user);
+    int addUser(User user);
 
     User getUserById(int id);
 
