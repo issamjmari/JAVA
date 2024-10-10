@@ -71,6 +71,8 @@ public class UsersArrayList implements UsersList {
         Transaction[] newArray = new Transaction[maxLength];
         int i = 0;
         for(Transaction transaction: oldArray) {
+            if(transaction == null)
+                return newArray;
             newArray[i++] = transaction;
         }
         return newArray;

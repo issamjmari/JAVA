@@ -60,7 +60,7 @@ public class myLinkedList {
 
     public Transaction[] toArray() {
         int size = 0;
-        Node tailTemp = tail;   
+        Node tailTemp = tail;
         while(tailTemp != null) {
             size++;
             tailTemp = tailTemp.next;

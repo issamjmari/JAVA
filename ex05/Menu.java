@@ -114,8 +114,9 @@ public class Menu {
                 System.out.println("User doesn't have any transaction");
             }
             for(Transaction transaction: transactions) {
-                System.out.print("To " + user.getName() + "(" + "id = " + user.getId() + ")");
-                System.out.println(" " + transaction.getAmount() + " with id = " + transaction.getId());
+                User curr = user == transaction.getRecipient() ? transaction.getSender() : transaction.getRecipient(); 
+                System.out.print("To " + curr.getName() + "(" + "id = " + curr.getId() + ")");
+                System.out.println(" " + (transaction.getAmount() > 0 ? "-" : "") + transaction.getAmount() + " with id = " + transaction.getId());
             }
             return ;
         }
@@ -152,9 +153,9 @@ public class Menu {
     }
 
     void    printLackingTransaction(User lacked, User lacking, UUID id, int amount) {
-        System.out.print(lacking.getName() + "(id = " + lacking.getId() + ") ");
+        System.out.print("  " + lacking.getName() + "(id = " + lacking.getId() + ") ");
         System.out.println("has an unacknowledged transfer id = " + id + " ");
-        System.out.println("from " + lacked.getName() + "(id = " + lacked.getId() + ") for " + amount);
+        System.out.println("from " + lacked.getName() + "(id = " + lacked.getId() + ") for " + (amount > 0 ? amount * -1 : amount));
     }
     private void checkTransactionValidity() {
             try {
@@ -162,14 +163,15 @@ public class Menu {
                 System.out.println("    Check results:");
                 for(Transaction transaction: unpaired) {
                     if(transaction.getLackingPart() == false)
-                        printLackingTransaction(transaction.getRecipient(), transaction.getSender(), transaction.getId(), transaction.getAmount());
-                    else
                         printLackingTransaction(transaction.getSender(), transaction.getRecipient(), transaction.getId(), transaction.getAmount());
+                    else     
+                        printLackingTransaction(transaction.getRecipient(), transaction.getSender(), transaction.getId(), transaction.getAmount());        
                 }
+                System.out.println("HERE LAST");
                 return ;
             }
             catch(Exception e) {
-                System.out.println("problem occured while checking validity, try again please");   
+                System.out.println("problem occured while checking validity, try again please" + e.getMessage());
                 return;
             }
     }
