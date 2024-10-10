@@ -16,8 +16,8 @@ public class TransactionsLinkedList implements TransactionsList {
         myLinkedList.addAtHead(transaction2);
     }
 
-    public void removeTransactionById(UUID id) {
-        myLinkedList.removeById(id);
+    public int removeTransactionById(UUID id) {
+        return myLinkedList.removeById(id);
     }
 
     public Transaction[] transformIntoArray() {

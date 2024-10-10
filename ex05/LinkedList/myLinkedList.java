@@ -41,7 +41,7 @@ public class myLinkedList {
         node.next = null;
         node.prev = null;
     }
-    public void removeById(UUID id) {
+    public int removeById(UUID id) {
         Node tailTemp = tail;
         boolean deleted = false;
         while(tailTemp != null) {
@@ -49,11 +49,13 @@ public class myLinkedList {
             if(id.equals(currData.getId())) {
                 deleteNode(tailTemp);
                 deleted = true;
+                return currData.getAmount();
             }
             tailTemp = tailTemp.next;
         }
         if(deleted == false)
             throw new TransactionNotFoundException("Transaction not found");
+        return -1;
     }
 
     public Transaction[] toArray() {

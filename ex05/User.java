@@ -26,6 +26,8 @@ public class User {
         return Id;
     }
     public void setBalance(int balance) {
+        System.out.println(Name + " has " + Balance);
+        System.out.println(balance + " will be added");
         this.Balance = balance;
     }
     public int getBalance() {

@@ -57,8 +57,8 @@ public class UsersArrayList implements UsersList {
         return user.getTransactionsList().transformIntoArray();
     }
 
-    public void removeTransaction(User user, UUID transactionId) {
-        user.getTransactionsList().removeTransactionById(transactionId);
+    public int removeTransaction(User user, UUID transactionId) {
+        return user.getTransactionsList().removeTransactionById(transactionId);
     }
 
     Transaction[] removeNullElements(Transaction[] oldArray) {
@@ -98,10 +98,17 @@ public class UsersArrayList implements UsersList {
                         for(Transaction inTransaction: inUserTransactions) {
                             if(inTransaction.getId() == outTransaction.getId())
                                 foundPair = true;
+                            
                         }
                     }
                 }
                 if(foundPair == false) {
+                    if(outUser == outTransaction.getRecipient()) {
+                        outTransaction.setLackingPart(false);
+                    }
+                    else {
+                        outTransaction.setLackingPart(true);
+                    }
                     transactions[arrayLoop++] = outTransaction;
                 }
 

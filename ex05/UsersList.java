@@ -15,7 +15,7 @@ public interface UsersList {
 
     Transaction[] getUserTransactions(User user);
 
-    void removeTransaction(User user, UUID Transactionid);
+    int removeTransaction(User user, UUID Transactionid);
 
     Transaction[] getUnpairedTransactions();
 }

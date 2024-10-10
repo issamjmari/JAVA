@@ -7,7 +7,7 @@ public interface TransactionsList {
 
     void addTransaction(Transaction transaction1, Transaction transaction2);
 
-    void removeTransactionById(UUID id);
+    int removeTransactionById(UUID id);
 
     Transaction[] transformIntoArray();
 

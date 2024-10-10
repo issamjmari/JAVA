@@ -1,5 +1,8 @@
 package ex05;
 import java.util.Scanner;
+import java.util.UUID;
+
+import javax.sound.midi.SysexMessage;
 
 public class Menu {
     private TransactionsService transactionsService = new TransactionsService();
@@ -107,6 +110,9 @@ public class Menu {
             }
             User user = this.transactionsService.getUserById(userId);
             Transaction[] transactions = this.transactionsService.getUserTransfers(userId);
+            if(transactions.length == 0) {
+                System.out.println("User doesn't have any transaction");
+            }
             for(Transaction transaction: transactions) {
                 System.out.print("To " + user.getName() + "(" + "id = " + user.getId() + ")");
                 System.out.println(" " + transaction.getAmount() + " with id = " + transaction.getId());
@@ -114,7 +120,59 @@ public class Menu {
             return ;
         }
     }
+    private void removeTransaction() {
+        System.out.println("    Enter a user ID and a transfer ID");
+        while(true) {
+            System.out.print("=> ");
+            String input = "";
+            input = scanner.nextLine();
+            String[] transactionData = input.split(" ");
+            int userId = 0;
+            String transactionId = transactionData[1];
+            int amount = 0;
+            try {
+                userId = Integer.parseInt(transactionData[0]);
+            }
+            catch(Exception e) {
+                System.out.println("Please enter a correct transaction data");
+                continue;
+            }
+            try {
+                UUID trUuid = UUID.fromString(transactionId);
+                amount = this.transactionsService.removeTransaction(trUuid, userId);
+            }
+            catch (Exception e) {
+                System.out.println("User can't remove transaction");
+                continue;
+            }
+            User user = this.transactionsService.getUserById(userId);
+            System.out.println("Transfer To " + user.getName() + "(id = " + user.getId() + ") " + amount + " removed");
+            return ;
+        }
+    }
 
+    void    printLackingTransaction(User lacked, User lacking, UUID id, int amount) {
+        System.out.print(lacking.getName() + "(id = " + lacking.getId() + ") ");
+        System.out.println("has an unacknowledged transfer id = " + id + " ");
+        System.out.println("from " + lacked.getName() + "(id = " + lacked.getId() + ") for " + amount);
+    }
+    private void checkTransactionValidity() {
+            try {
+                Transaction[] unpaired = this.transactionsService.getUnpairedTransactions();
+                System.out.println("    Check results:");
+                for(Transaction transaction: unpaired) {
+                    if(transaction.getLackingPart() == false)
+                        printLackingTransaction(transaction.getRecipient(), transaction.getSender(), transaction.getId(), transaction.getAmount());
+                    else
+                        printLackingTransaction(transaction.getSender(), transaction.getRecipient(), transaction.getId(), transaction.getAmount());
+                }
+                return ;
+            }
+            catch(Exception e) {
+                System.out.println("problem occured while checking validity, try again please");   
+                return;
+            }
+    }
     private void performTransaction() {
         System.out.println("    Enter a sender ID, a recipient ID, and a transfer amount");
         while(true) {
@@ -152,14 +210,12 @@ public class Menu {
             viewUserBalance();
         if(option == 3)
             performTransaction();
-        // if(option == 4)
-        //     op1();
-        // if(option == 5)
-        //     op1();
-        // if(option == 6)
-        //     op1();
-        // if(option == 7)
-        //     op1();
+        if(option == 4)
+            getUserTransactions();
+        if(option == 5)
+            removeTransaction();
+        if(option == 6)
+            checkTransactionValidity();
     }
     private void handleProd(int option) {
         if(option == 1)

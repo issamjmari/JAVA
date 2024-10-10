@@ -13,7 +13,9 @@ public class Transaction {
 
     private String transferType; 
 
-    private Integer amount; 
+    private Integer amount;
+    
+    private boolean lackingPart;
 
     Transaction() {
         
@@ -42,8 +44,20 @@ public class Transaction {
     public UUID getId() {
         return id;
     }
+    public void setLackingPart(boolean bool) {
+        this.lackingPart = bool;
+    }
+    public boolean getLackingPart() {
+        return lackingPart;
+    }
     public int getAmount() {
         return amount;
+    }
+    public User getSender() {
+        return sender;
+    }
+    public User getRecipient() {
+        return recipient;
     }
     public void toStr() {
         System.out.println((

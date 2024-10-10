@@ -27,9 +27,9 @@ public class TransactionsService {
         return userList.getUserTransactions(user);
     }
 
-    void removeTransaction(UUID transactionId, int userId) {
+    int removeTransaction(UUID transactionId, int userId) {
         User user = this.userList.getUserById(userId);
-        this.userList.removeTransaction(user, transactionId);
+        return this.userList.removeTransaction(user, transactionId);
     }
 
     Transaction[] getUnpairedTransactions() {
