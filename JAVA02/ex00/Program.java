@@ -13,6 +13,64 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Program {
+
+    private static int getMaxBytes(int i) {
+        if(i == 0)
+            return 8;
+        else if(i == 1)
+            return 6;
+        else if(i == 2)
+            return 6;
+        else if(i == 3)
+            return 3;
+        else if(i == 4)
+            return 4;
+        else if(i == 5)
+            return 4;
+        else if(i == 6)
+            return 3;
+        else if(i == 7)
+            return 2;
+        else if(i == 8)
+            return 7;
+        else if(i == 9)
+            return 4;
+        return 0;
+    }
+    private static int formatTypeBytes(List<String> bytes) {
+        String[] arr = {
+            "89 50 4E 47 0D 0A 1A 0A",
+            "47 49 46 38 37 61",
+            "47 49 46 38 39 61",
+            "FF D8 FF",
+            "25 50 44 46",
+            "50 4B 03 04",
+            "49 44 33",
+            "4D 5A",
+            "52 61 72 21 1A 07 00",
+            "52 49 46 46"
+        };
+        int i = 0;
+        for(String format: arr) {
+            String[] splFormat = format.split(" ");
+            int j = 0;
+            boolean equals = true;
+            if(splFormat.length != bytes.size())
+                continue;
+            for(String spl: splFormat) {
+                if(!spl.equals(bytes.get(j))) {
+                    equals = false;
+                    i++;
+                    break;
+                }
+                j++;
+            }
+            if(equals == true)
+                return getMaxBytes(i);
+            i++;
+        }
+        return -1;
+    }
     private static String checkFormat(List<String> bytes, Map<String, String> signatures) {
         for(Map.Entry<String, String> entry: signatures.entrySet()) {
             String[] splitSignature = entry.getValue().split(" ");
@@ -23,8 +81,6 @@ public class Program {
                     matches = false;
                     break;
                 }
-                System.out.println("b " + b);
-                System.out.println("splitSignature[i++] " + splitSignature[i]);
                 if(b.equals(splitSignature[i++]) == false) {
                     matches = false;
                     break;
@@ -65,11 +121,12 @@ public class Program {
                     if(i == 8)
                         break;
                     bytes.add(String.format("%02X", byteRead));
+                    if(formatTypeBytes(bytes) != -1)
+                        break;
                     i++;
                 }
                 currInput.close();
                 String format = checkFormat(bytes, signatures);
-                System.out.println("format " + format);
                 if(format.length() == 0) {
                     System.out.println("UNDEFINED");
                     continue;
@@ -77,6 +134,7 @@ public class Program {
                 System.out.println("PROCESSED");
                 byte[] resBytes = format.getBytes();
                 result.write(resBytes);
+                result.write("\n".getBytes());
             }
         }
         catch (IOException e) {
