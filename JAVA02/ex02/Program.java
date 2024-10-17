@@ -33,6 +33,10 @@ class Program {
                         System.err.println("Error: Invalid path - " + e.getMessage());
                     }
                 }
+                else if(input.equals("cd")) {
+
+                }
+                else if(input.equals(""))
             }
             catch (Exception e) {
 
