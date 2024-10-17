@@ -64,6 +64,7 @@ class Program {
 
     public static void main(String[] args) {
         int threadNumber;
+        MessagePrinter printer = new MessagePrinter();
         try {
             threadNumber = Integer.parseInt(args[0].split("=")[1]);    
         }
@@ -71,7 +72,6 @@ class Program {
             System.out.println("invalid argument");
             return ; 
         }
-        MessagePrinter printer = new MessagePrinter();
         Thread runnableThread = new Thread(new MyRunnable(threadNumber, printer));
         runnableThread.start();
 
