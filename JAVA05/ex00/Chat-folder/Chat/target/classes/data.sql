@@ -21,13 +21,3 @@ INSERT INTO Message (author_id, chatroom_id, text) VALUES
 (3, 2, 'This is a test message.'),
 (4, 3, 'How is everyone doing?'),
 (5, 4, 'Let’s talk about programming.');
-
--- Insert into User_Chatroom Junction Table
-INSERT INTO User_Chatroom (user_id, chatroom_id) VALUES
-(1, 1),
-(1, 4),
-(2, 1),
-(2, 2),
-(3, 2),
-(4, 3),
-(5, 5);
