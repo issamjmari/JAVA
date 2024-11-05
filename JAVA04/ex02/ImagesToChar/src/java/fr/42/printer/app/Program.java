@@ -4,38 +4,49 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.JCommander;
+
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import fr._42.printer.logic.ConvertImageToChar;
 
 
 class Program {
 
+    @Parameter(names = "--white", description = "Character to use for white pixels")
+    private String white;
+
+    @Parameter(names = "--black", description = "Character to use for black pixels")
+    private String black;
     public static void main(String[] args) {
-        if(args.length != 2) {
-            System.out.println("Invalid set of arguments, read README.txt file please");
-            System.exit(1);
-        }
-        char whitechar = ' ';
-        char blackChar = ' ';
-        String pathToImage = "it.bmp";
-        try {
-            String firstChar = args[0].split("=")[1];
-            String secondChar = args[1].split("=")[1];
-            if(firstChar.length() > 1 || secondChar.length() > 1) {
-                throw new Exception("arguments invalid");
+        List<String> processedArgs = new ArrayList<>();
+        for (String arg : args) {
+            if (arg.contains("=")) {
+                String[] splitArg = arg.split("=", 2);
+                processedArgs.add(splitArg[0]);
+                processedArgs.add(splitArg[1]);
+            } else {
+                processedArgs.add(arg);
             }
-            whitechar = firstChar.charAt(0);
-            blackChar = secondChar.charAt(0);
         }
-        catch(Exception e) {
-            System.out.println("Invalid argument values, read README.txt file please");
-            System.exit(1);
-        }
+        String[] modifiedArgs = processedArgs.toArray(new String[0]);
+
+        Program commandLineArgs = new Program();
+        JCommander.newBuilder()
+                  .addObject(commandLineArgs)
+                  .build()
+                  .parse(modifiedArgs);
+
+        String pathToImage = "it.bmp";
         try {
             InputStream imageStream = Program.class.getClassLoader().getResourceAsStream(pathToImage);
             BufferedImage image = ImageIO.read(imageStream);
             ConvertImageToChar convertImageToChar = new ConvertImageToChar();
-            convertImageToChar.convertImageToArray(image, whitechar, blackChar);
+            convertImageToChar.convertImageToArray(image, commandLineArgs.white, commandLineArgs.black);
             
         }
         catch(Exception e) {
